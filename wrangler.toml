@@ -1,0 +1,27 @@
+name = "worker-dlq-demo"
+main = "src/index.ts"
+compatibility_date = "2023-11-21"
+
+# Bind a Queue producer. Use this binding to schedule an arbitrary task that may be processed later by a Queue consumer.
+# Docs: https://developers.cloudflare.com/queues/get-started
+[[queues.producers]]
+binding = "MY_QUEUE_EDGAR"
+queue = "queue-demo"
+
+[[queues.producers]]
+binding = "MY_QUEUE_EDGAR_DLQ"
+queue = "queue-demo-dlq"
+
+# Bind a Queue consumer. Queue Consumers can retrieve tasks scheduled by Producers to act on them.
+# Docs: https://developers.cloudflare.com/queues/get-started
+[[queues.consumers]]
+queue = "queue-demo"
+max_retries = 1
+max_batch_size = 1
+max_batch_timeout = 5
+
+[[queues.consumers]]
+queue = "queue-demo-dlq"
+max_retries = 1
+max_batch_size = 1
+max_batch_timeout = 50
